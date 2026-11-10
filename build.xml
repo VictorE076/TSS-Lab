@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="IncreasingSequenceAnalyzer" default="compile" basedir=".">
+
+    <property name="major.home" value="D:/Major/major"/>
+    <property name="major.jar" value="${major.home}/lib/major.jar"/>
+    <property name="major.rt.jar" value="${major.home}/lib/major-rt.jar"/>
+
+    <property name="out.dir" value="build-major"/>
+    <property name="classes.dir" value="${out.dir}/classes"/>
+    <property name="test.classes.dir" value="${out.dir}/test-classes"/>
+
+
+    <target name="clean" description="Clean">
+        <delete dir="${out.dir}"/>
+        <delete dir="bin"/>
+        <!-- Distrugem folderele ascunse în care IntelliJ pune cod ne-mutat -->
+        <delete dir="target"/>
+        <delete dir="out"/>
+        <delete>
+            <fileset dir="." includes="*.csv, *.log, *.ser"/>
+        </delete>
+    </target>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${test.classes.dir}"/>
+    </target>
+
+    <target name="compile" depends="init" description="Compile">
+        <javac srcdir="src/main/java" destdir="${classes.dir}" debug="yes" includeantruntime="false" fork="true">
+            <compilerarg value="-J-Dmajor.home=${major.home}"/>
+            <compilerarg value="-processorpath"/>
+            <compilerarg file="${major.jar}"/>
+            <compilerarg value="-Xplugin:MajorPlugin"/>
+            <compilerarg value="-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"/>
+            <compilerarg value="-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED"/>
+            <compilerarg value="-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED"/>
+            <compilerarg value="-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED"/>
+            <compilerarg value="-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED"/>
+            <compilerarg value="-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"/>
+            <compilerarg value="-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"/>
+        </javac>
+    </target>
+
+    <target name="compile.tests" depends="compile" description="Compile tests">
+        <javac srcdir="src/test/java" destdir="${test.classes.dir}" debug="yes" includeantruntime="false">
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <fileset dir="lib" includes="**/*.jar"/>
+                <!-- Adăugăm runtime-ul și la compilarea testelor pentru siguranță -->
+                <pathelement location="${major.rt.jar}"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="mutation.test" depends="compile.tests" description="Run mutation analysis">
+        <junit printsummary="true"
+               showoutput="true"
+               mutationAnalysis="true"
+               summaryFile="summary.csv"
+               mutantDetailsFile="details.csv"
+               covMapFile="covMap.csv"
+               testMapFile="testMap.csv"
+               mutantsLogFile="mutants.log">
+
+            <classpath>
+                <!-- Ordine strictă: Mutanții PRIMII, apoi Testele, apoi Librăriile -->
+                <pathelement location="${classes.dir}"/>
+                <pathelement location="${test.classes.dir}"/>
+                <fileset dir="lib" includes="**/*.jar"/>
+                <pathelement location="${major.rt.jar}"/>
+            </classpath>
+
+            <batchtest fork="false">
+                <fileset dir="${test.classes.dir}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+</project>

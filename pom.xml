@@ -22,6 +22,18 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
+            <version>1.10.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -58,6 +70,38 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.15.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.2.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <verbose>true</verbose>
+                    <targetClasses>
+                        <param>ro.fmi.tss.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>ro.fmi.tss.*</param>
+<!--                        <param>ro.fmi.tss.McdcTest</param>-->
+<!--                        <param>ro.fmi.tss.BoundaryValueAnalysisTest</param>-->
+<!--                        <param>ro.fmi.tss.CauseEffectGraphingTest</param>-->
+<!--                        <param>ro.fmi.tss.EquivalencePartitioningTest</param>-->
+                    </targetTests>
+                    <mutators>
+                        <mutator>DEFAULTS</mutator>
+                    </mutators>
+                    <jvmArgs>
+                        <value>-XX:+EnableDynamicAgentLoading</value>
+                    </jvmArgs>
+                </configuration>
             </plugin>
 
         </plugins>

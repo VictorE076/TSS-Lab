@@ -1,6 +1,18 @@
 
 package ro.fmi.tss;
 
+//import org.junit.Test;
+
+//import org.junit.jupiter.api.Disabled;
+//import org.junit.jupiter.api.Test;
+//import org.junit.platform.runner.JUnitPlatform;
+//import org.junit.runner.RunWith;
+//
+//import static org.junit.Assert.assertEquals;
+//
+//@Disabled
+//@RunWith(JUnitPlatform.class)
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
