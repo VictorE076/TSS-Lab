@@ -1,20 +1,10 @@
 package ro.fmi.tss;
 
-//import org.junit.Test;
-
 import org.junit.Test;
 import org.junit.jupiter.api.Disabled;
-
 import static org.junit.Assert.assertEquals;
-//import org.junit.jupiter.api.Test;
-//import org.junit.runner.RunWith;
-//import org.junit.platform.runner.JUnitPlatform;
-//
-//import static org.junit.Assert.assertEquals;
 
 //@Disabled
-
-//@RunWith(JUnitPlatform.class)
 
 public class McdcTest {
 

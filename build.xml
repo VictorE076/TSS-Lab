@@ -13,7 +13,6 @@
     <target name="clean" description="Clean">
         <delete dir="${out.dir}"/>
         <delete dir="bin"/>
-        <!-- Distrugem folderele ascunse în care IntelliJ pune cod ne-mutat -->
         <delete dir="target"/>
         <delete dir="out"/>
         <delete>
@@ -47,7 +46,6 @@
             <classpath>
                 <pathelement location="${classes.dir}"/>
                 <fileset dir="lib" includes="**/*.jar"/>
-                <!-- Adăugăm runtime-ul și la compilarea testelor pentru siguranță -->
                 <pathelement location="${major.rt.jar}"/>
             </classpath>
         </javac>
@@ -64,11 +62,8 @@
                mutantsLogFile="mutants.log">
 
             <classpath>
-                <!-- Ordine strictă: Mutanții PRIMII, apoi Testele, apoi Librăriile -->
                 <pathelement location="${classes.dir}"/>
                 <pathelement location="${test.classes.dir}"/>
-                <fileset dir="lib" includes="**/*.jar"/>
-                <pathelement location="${major.rt.jar}"/>
             </classpath>
 
             <batchtest fork="false">
